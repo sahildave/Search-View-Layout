@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search_expanded_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:visibility="gone"
+    tools:visibility="visible">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/search_expanded_box"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="@drawable/rounded_corners"
+        android:orientation="horizontal"
+        android:gravity="center_vertical" >
+        <ImageButton
+            android:id="@+id/search_expanded_back_button"
+            android:layout_width="@dimen/search_box_icon_size"
+            android:layout_height="@dimen/search_box_icon_size"
+            android:layout_margin="@dimen/search_box_navigation_icon_margin"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+        <EditText
+            android:id="@+id/search_expanded_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/search_box_icon_size"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/search_box_text_left_margin"
+            android:textSize="@dimen/search_text_size"
+            android:textColor="@color/searchbox_text_color"
+            android:textColorHint="@color/searchbox_hint_text_color"
+            android:background="@null"
+            android:inputType="textFilter"
+            android:singleLine="true"
+            android:imeOptions="flagNoExtractUi" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/search_expanded_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Margin to the left and right of the search box. -->
+    <dimen name="search_margin_horizontal">8dp</dimen>
+    <!-- Margin above the search box. -->
+    <dimen name="search_top_margin">8dp</dimen>
+    <!-- Margin below the search box. -->
+    <dimen name="search_bottom_margin">8dp</dimen>
+    <dimen name="search_collapsed_text_size">14sp</dimen>
+    <!-- Search box interior padding - left -->
+    <dimen name="search_box_left_padding">8dp</dimen>
+    <!-- Search box interior padding - right -->
+    <dimen name="search_box_right_padding">8dp</dimen>
+
+    <!-- Padding around the icon in the search box. -->
+    <dimen name="search_box_icon_margin">4dp</dimen>
+    <dimen name="search_box_search_icon_padding">2dp</dimen>
+    <dimen name="search_box_collapsed_text_margin_left">16dp</dimen>
+    <dimen name="search_list_padding_top">16dp</dimen>
+    <dimen name="search_box_elevation">3dp</dimen>
+
+    <!-- Size of the icon (voice search, back arrow) in the search box. -->
+    <dimen name="search_box_icon_size">24dp</dimen>
+    <!-- Size of the close icon.
+         Because it expands diagonally, it needs to be shrunk to look relatively the same size -->
+    <dimen name="search_box_close_icon_size">24dp</dimen>
+    <!-- Padding around back arrow icon in the search box -->
+    <dimen name="search_box_navigation_icon_margin">14dp</dimen>
+    <!-- Padding around close icon in the search box -->
+    <dimen name="search_box_close_icon_margin">16dp</dimen>
+    <!-- Left margin of the text field in the search box. -->
+    <dimen name="search_box_text_left_margin">8dp</dimen>
+    <!-- Search box text size -->
+    <dimen name="search_text_size">20sp</dimen>
+</resources>

@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Search View Sample</string>
+
+    <string name="lorem_1">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vehicula sem a malesuada rhoncus.
+        Pellentesque ut dolor a dui porttitor porta lacinia non libero.
+    </string>
+    <string name="lorem_2">
+        Phasellus congue tincidunt lectus, at dignissim ligula maximus eu.
+        Quisque interdum nunc eget tellus bibendum suscipit. Phasellus feugiat ultricies posuere.
+    </string>
+    <string name="lorem_3">
+        Sed pellentesque placerat quam, ut ultricies turpis feugiat a.
+        Aliquam a volutpat risus.
+    </string>
+</resources>
