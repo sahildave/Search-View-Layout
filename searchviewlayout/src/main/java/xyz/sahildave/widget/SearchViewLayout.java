@@ -41,7 +41,6 @@ public class SearchViewLayout extends FrameLayout {
 
     /* Subclass-visible for testing */
     protected boolean mIsExpanded = false;
-    protected boolean mIsFadedOut = false;
 
     private ViewGroup mCollapsed;
     private ViewGroup mExpanded;
@@ -196,17 +195,6 @@ public class SearchViewLayout extends FrameLayout {
         this.mToolbar = toolbar;
     }
 
-    public void setVisible(boolean visible) {
-        if (visible) {
-            setAlpha(1);
-            setVisibility(View.VISIBLE);
-            mIsFadedOut = false;
-        } else {
-            setAlpha(0);
-            setVisibility(View.GONE);
-            mIsFadedOut = true;
-        }
-    }
     public void expand(boolean requestFocus) {
         mCollapsedHeight = getHeight();
         toggleToolbar(true);
@@ -323,15 +311,18 @@ public class SearchViewLayout extends FrameLayout {
             }
         });
 
+        mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+
+            }
+        });
+
         mAnimator.setDuration(ANIMATION_DURATION);
         mAnimator.start();
     }
 
     public boolean isExpanded() {
         return mIsExpanded;
-    }
-
-    public boolean isFadedOut() {
-        return mIsFadedOut;
     }
 }
