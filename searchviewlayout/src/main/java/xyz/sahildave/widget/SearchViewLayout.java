@@ -27,6 +27,7 @@ import android.content.Context;
 import android.graphics.drawable.TransitionDrawable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
@@ -48,6 +49,7 @@ public class SearchViewLayout extends FrameLayout {
     private View mSearchIcon;
     private View mCollapsedSearchBox;
     private View mBackButtonView;
+    private View mExpandedSearchIcon;
 
     private int toolbarExpandedHeight = 0;
 
@@ -92,6 +94,7 @@ public class SearchViewLayout extends FrameLayout {
         mExpanded = (ViewGroup) findViewById(R.id.search_expanded_root);
         mSearchEditText = (EditText) mExpanded.findViewById(R.id.search_expanded_edit_text);
         mBackButtonView = mExpanded.findViewById(R.id.search_expanded_back_button);
+        mExpandedSearchIcon = findViewById(R.id.search_expanded_magnifying_glass);
 
         // Convert a long click into a click to expand the search box, and then long click on the
         // search view. This accelerates the long-press scenario for copy/paste.
@@ -135,11 +138,45 @@ public class SearchViewLayout extends FrameLayout {
                 return false;
             }
         });
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mSearchEditText.getText().length() > 0) {
+                    mExpandedSearchIcon.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mExpandedSearchIcon.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         mBackButtonView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 collapse();
+            }
+        });
+
+        mExpandedSearchIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Editable editable = mSearchEditText.getText();
+                if (editable != null && editable.length() > 0) {
+                    if (mSearchListener != null) {
+                        mSearchListener.onFinished(editable.toString());
+                    }
+                    Utils.hideInputMethod(v);
+                }
             }
         });
         mBackgroundTransition = (TransitionDrawable) getBackground();
