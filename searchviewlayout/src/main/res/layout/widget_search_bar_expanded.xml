@@ -38,7 +38,7 @@
             android:background="@null"
             android:inputType="textFilter"
             android:singleLine="true"
-            android:imeOptions="flagNoExtractUi" />
+            android:imeOptions="actionSearch" />
         <ImageView
             android:id="@+id/search_expanded_magnifying_glass"
             android:layout_height="@dimen/search_box_icon_size"

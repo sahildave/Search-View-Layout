@@ -32,6 +32,7 @@ import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -111,7 +112,6 @@ public class SearchViewLayout extends FrameLayout {
         mSearchIcon.setOnClickListener(mSearchViewOnClickListener);
         mCollapsedSearchBox.setOnClickListener(mSearchViewOnClickListener);
 
-        mSearchEditText.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
         mSearchEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -125,7 +125,7 @@ public class SearchViewLayout extends FrameLayout {
         mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == KeyEvent.KEYCODE_ENTER) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     search(v);
                     return true;
                 }
