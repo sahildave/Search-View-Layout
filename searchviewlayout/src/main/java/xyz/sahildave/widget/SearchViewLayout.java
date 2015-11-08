@@ -126,13 +126,7 @@ public class SearchViewLayout extends FrameLayout {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == KeyEvent.KEYCODE_ENTER) {
-                    Editable editable = mSearchEditText.getText();
-                    if (editable != null && editable.length() > 0) {
-                        if (mSearchListener != null) {
-                            mSearchListener.onFinished(editable.toString());
-                        }
-                        Utils.hideInputMethod(v);
-                    }
+                    search(v);
                     return true;
                 }
                 return false;
@@ -170,18 +164,22 @@ public class SearchViewLayout extends FrameLayout {
         mExpandedSearchIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Editable editable = mSearchEditText.getText();
-                if (editable != null && editable.length() > 0) {
-                    if (mSearchListener != null) {
-                        mSearchListener.onFinished(editable.toString());
-                    }
-                    Utils.hideInputMethod(v);
-                }
+                search(v);
             }
         });
         mBackgroundTransition = (TransitionDrawable) getBackground();
         mBackgroundTransition.setCrossFadeEnabled(true);
         super.onFinishInflate();
+    }
+
+    private void search(View focusedView) {
+        Editable editable = mSearchEditText.getText();
+        if (editable != null && editable.length() > 0) {
+            if (mSearchListener != null) {
+                mSearchListener.onFinished(editable.toString());
+            }
+            Utils.hideInputMethod(focusedView);
+        }
     }
 
     @Override
