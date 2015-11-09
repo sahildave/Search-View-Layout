@@ -35,13 +35,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onFinished(String searchKeyword) {
                 searchViewLayout.collapse();
-                Snackbar.make(searchViewLayout, "Search Done - " + searchKeyword, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(searchViewLayout, "Start Search for - " + searchKeyword, Snackbar.LENGTH_LONG).show();
             }
         });
-        searchViewLayout.setOnToggleVisibilityListener(new SearchViewLayout.OnToggleVisibilityListener() {
+        searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnimationListener() {
             @Override
             public void onStart(boolean expanded) {
-                if(expanded) {
+                if (expanded) {
                     fab.hide();
                 } else {
                     fab.show();

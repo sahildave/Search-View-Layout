@@ -1,169 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:showIn="@layout/activity_main"
     tools:context="xyz.sahildave.widget.MainActivity">
 
-    <LinearLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp"
+        tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
 
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
+        <android.support.v7.widget.AppCompatTextView
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardElevation="4dp"
-            app:contentPadding="16dp"
-            tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_title"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"
-                    android:text="Main Screen Card"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_description"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@id/card_title"
-                    android:textSize="16sp"
-                    android:text="Click on the search view on the top. It should overlay another fragment"/>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Main Screen Card"/>
+
+        <android.support.v7.widget.AppCompatTextView
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardElevation="4dp"
-            app:contentPadding="16dp"
-            tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            android:text="Click on the search view on the top. It should overlay another fragment"/>
 
+    </android.support.v7.widget.CardView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp"
+        tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_title_1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"
-                    android:text="Main Screen Card"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_description_1"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@id/card_title_1"
-                    android:textSize="16sp"
-                    android:text="Click on the search view on the top. It should overlay another fragment"/>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Main Screen Card"/>
+
+        <android.support.v7.widget.AppCompatTextView
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardElevation="4dp"
-            app:contentPadding="16dp"
-            tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            android:text="Click on the search view on the top. It should overlay another fragment"/>
 
+    </android.support.v7.widget.CardView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp"
+        tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_title_2"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"
-                    android:text="Main Screen Card"/>
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_description_2"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@id/card_title_2"
-                    android:textSize="16sp"
-                    android:text="Click on the search view on the top. It should overlay another fragment"/>
-
-            </RelativeLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-        <android.support.v7.widget.CardView
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Main Screen Card"/>
+
+        <android.support.v7.widget.AppCompatTextView
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            app:cardElevation="4dp"
-            app:contentPadding="16dp"
-            tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            android:text="Click on the search view on the top. It should overlay another fragment"/>
 
+    </android.support.v7.widget.CardView>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp"
+        tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_title_3"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:textSize="16sp"
-                    android:textColor="@android:color/black"
-                    android:text="Main Screen Card"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Main Screen Card"/>
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/card_description_3"
-                    android:layout_height="wrap_content"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_below="@id/card_title_3"
-                    android:textSize="16sp"
-                    android:text="Click on the search view on the top. It should overlay another fragment"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            android:text="Click on the search view on the top. It should overlay another fragment"/>
 
-            </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
-        </android.support.v7.widget.CardView>
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp"
+        tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
 
-    </LinearLayout>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Main Screen Card"/>
 
-</RelativeLayout>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            android:text="Click on the search view on the top. It should overlay another fragment"/>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="4dp"
+        app:contentPadding="16dp"
+        tools:context="xyz.sahildave.widget.sample.SearchStaticFragment">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:text="Main Screen Card"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginTop="24dp"
+            android:textSize="16sp"
+            android:text="Click on the search view on the top. It should overlay another fragment"/>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>
+

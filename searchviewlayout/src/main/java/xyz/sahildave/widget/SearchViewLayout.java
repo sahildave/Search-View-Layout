@@ -55,7 +55,7 @@ public class SearchViewLayout extends FrameLayout {
     private int toolbarExpandedHeight = 0;
 
     private ValueAnimator mAnimator;
-    private OnToggleVisibilityListener mOnToggleVisibilityListener;
+    private OnToggleAnimationListener mOnToggleAnimationListener;
     private SearchListener mSearchListener;
     private Fragment mExpandedContentFragment;
     private FragmentManager mFragmentManager;
@@ -65,7 +65,7 @@ public class SearchViewLayout extends FrameLayout {
     private int mExpandedHeight;
     private int mCollapsedHeight;
 
-    public interface OnToggleVisibilityListener {
+    public interface OnToggleAnimationListener {
         void onStart(boolean expanded);
         void onFinish(boolean expanded);
     }
@@ -78,8 +78,8 @@ public class SearchViewLayout extends FrameLayout {
         super(context, attrs);
     }
 
-    public void setOnToggleVisibilityListener(OnToggleVisibilityListener listener) {
-        mOnToggleVisibilityListener = listener;
+    public void setOnToggleAnimationListener(OnToggleAnimationListener listener) {
+        mOnToggleAnimationListener = listener;
     }
 
     public void setSearchListener(SearchListener listener) {
@@ -126,7 +126,8 @@ public class SearchViewLayout extends FrameLayout {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    search(v);
+                    callSearchListener();
+                    Utils.hideInputMethod(v);
                     return true;
                 }
                 return false;
@@ -134,24 +135,15 @@ public class SearchViewLayout extends FrameLayout {
         });
         mSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mSearchEditText.getText().length() > 0) {
-                    mExpandedSearchIcon.setVisibility(View.VISIBLE);
-                }
-                else {
-                    mExpandedSearchIcon.setVisibility(View.INVISIBLE);
+                    Utils.fadeIn(mExpandedSearchIcon, ANIMATION_DURATION);
+                } else {
+                    Utils.fadeOut(mExpandedSearchIcon, ANIMATION_DURATION);
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void afterTextChanged(Editable s) { }
         });
 
         mBackButtonView.setOnClickListener(new OnClickListener() {
@@ -164,7 +156,8 @@ public class SearchViewLayout extends FrameLayout {
         mExpandedSearchIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                search(v);
+                callSearchListener();
+                Utils.hideInputMethod(v);
             }
         });
         mBackgroundTransition = (TransitionDrawable) getBackground();
@@ -172,13 +165,12 @@ public class SearchViewLayout extends FrameLayout {
         super.onFinishInflate();
     }
 
-    private void search(View focusedView) {
+    private void callSearchListener() {
         Editable editable = mSearchEditText.getText();
         if (editable != null && editable.length() > 0) {
             if (mSearchListener != null) {
                 mSearchListener.onFinished(editable.toString());
             }
-            Utils.hideInputMethod(focusedView);
         }
     }
 
@@ -329,8 +321,8 @@ public class SearchViewLayout extends FrameLayout {
                 } else {
                     Utils.setPaddingAll(SearchViewLayout.this, 8);
                 }
-                if (mOnToggleVisibilityListener != null)
-                    mOnToggleVisibilityListener.onFinish(expand);
+                if (mOnToggleAnimationListener != null)
+                    mOnToggleAnimationListener.onFinish(expand);
             }
 
             @Override
@@ -341,8 +333,8 @@ public class SearchViewLayout extends FrameLayout {
                     params.height = mCollapsedHeight;
                     setLayoutParams(params);
                 }
-                if (mOnToggleVisibilityListener != null)
-                    mOnToggleVisibilityListener.onStart(expand);
+                if (mOnToggleAnimationListener != null)
+                    mOnToggleAnimationListener.onStart(expand);
             }
         });
 
