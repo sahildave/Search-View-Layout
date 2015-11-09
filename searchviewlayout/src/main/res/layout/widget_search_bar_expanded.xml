@@ -15,6 +15,7 @@
         android:id="@+id/search_expanded_box"
         android:layout_width="match_parent"
         android:layout_height="64dp"
+        android:paddingRight="@dimen/search_box_right_padding"
         android:background="@drawable/rounded_corners"
         android:orientation="horizontal"
         android:gravity="center_vertical" >
@@ -37,7 +38,18 @@
             android:background="@null"
             android:inputType="textFilter"
             android:singleLine="true"
-            android:imeOptions="flagNoExtractUi" />
+            android:imeOptions="actionSearch" />
+        <ImageView
+            android:id="@+id/search_expanded_magnifying_glass"
+            android:layout_height="@dimen/search_box_icon_size"
+            android:layout_width="@dimen/search_box_icon_size"
+            android:layout_margin="@dimen/search_box_icon_margin"
+            android:padding="@dimen/search_box_search_icon_padding"
+            android:src="@drawable/ic_search"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:importantForAccessibility="no"
+            android:tint="@color/searchbox_icon_tint"
+            android:visibility="invisible"/>
     </LinearLayout>
 
     <FrameLayout

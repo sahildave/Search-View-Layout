@@ -27,10 +27,12 @@ import android.content.Context;
 import android.graphics.drawable.TransitionDrawable;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ public class SearchViewLayout extends FrameLayout {
     private View mSearchIcon;
     private View mCollapsedSearchBox;
     private View mBackButtonView;
+    private View mExpandedSearchIcon;
 
     private int toolbarExpandedHeight = 0;
 
@@ -92,6 +95,7 @@ public class SearchViewLayout extends FrameLayout {
         mExpanded = (ViewGroup) findViewById(R.id.search_expanded_root);
         mSearchEditText = (EditText) mExpanded.findViewById(R.id.search_expanded_edit_text);
         mBackButtonView = mExpanded.findViewById(R.id.search_expanded_back_button);
+        mExpandedSearchIcon = findViewById(R.id.search_expanded_magnifying_glass);
 
         // Convert a long click into a click to expand the search box, and then long click on the
         // search view. This accelerates the long-press scenario for copy/paste.
@@ -108,7 +112,6 @@ public class SearchViewLayout extends FrameLayout {
         mSearchIcon.setOnClickListener(mSearchViewOnClickListener);
         mCollapsedSearchBox.setOnClickListener(mSearchViewOnClickListener);
 
-        mSearchEditText.setImeActionLabel("Search", KeyEvent.KEYCODE_ENTER);
         mSearchEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -122,17 +125,32 @@ public class SearchViewLayout extends FrameLayout {
         mSearchEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == KeyEvent.KEYCODE_ENTER) {
-                    Editable editable = mSearchEditText.getText();
-                    if (editable != null && editable.length() > 0) {
-                        if (mSearchListener != null) {
-                            mSearchListener.onFinished(editable.toString());
-                        }
-                        Utils.hideInputMethod(v);
-                    }
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    search(v);
                     return true;
                 }
                 return false;
+            }
+        });
+        mSearchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (mSearchEditText.getText().length() > 0) {
+                    mExpandedSearchIcon.setVisibility(View.VISIBLE);
+                }
+                else {
+                    mExpandedSearchIcon.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
@@ -142,9 +160,26 @@ public class SearchViewLayout extends FrameLayout {
                 collapse();
             }
         });
+
+        mExpandedSearchIcon.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search(v);
+            }
+        });
         mBackgroundTransition = (TransitionDrawable) getBackground();
         mBackgroundTransition.setCrossFadeEnabled(true);
         super.onFinishInflate();
+    }
+
+    private void search(View focusedView) {
+        Editable editable = mSearchEditText.getText();
+        if (editable != null && editable.length() > 0) {
+            if (mSearchListener != null) {
+                mSearchListener.onFinished(editable.toString());
+            }
+            Utils.hideInputMethod(focusedView);
+        }
     }
 
     @Override
