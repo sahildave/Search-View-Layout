@@ -42,12 +42,18 @@ Listen to layout collapse/expand by using `setOnToggleVisibilityListener`. For e
 
 ![Screenshot](/demo.gif?raw=true)
 
+### GET
+
+Available at jCenter and mavenCentral.
+
+    dependencies {
+        compile 'xyz.sahildave:searchviewlayout:0.0.1'
+    }
+
 ### TODO
 
-* Push to maven
 * Make view transition background programatically by asking for startColor and endColor
-* Add a "Search" button in the expanded form. Currently, relying on keyboard.
-* API for settings icons
+* API for setting icons
 * Granular setPadding using `onAnimationUpdate`
 
 #### Contribute
