@@ -24,11 +24,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +65,9 @@ public class SearchViewLayout extends FrameLayout {
     private FragmentManager mFragmentManager;
     private TransitionDrawable mBackgroundTransition;
     private Toolbar mToolbar;
+
+    private Drawable mCollapsedDrawable;
+    private Drawable mExpandedDrawable;
 
     private int mExpandedHeight;
     private int mCollapsedHeight;
@@ -142,8 +149,12 @@ public class SearchViewLayout extends FrameLayout {
                     Utils.fadeOut(mExpandedSearchIcon, ANIMATION_DURATION);
                 }
             }
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void afterTextChanged(Editable s) { }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
         });
 
         mBackButtonView.setOnClickListener(new OnClickListener() {
@@ -160,8 +171,12 @@ public class SearchViewLayout extends FrameLayout {
                 Utils.hideInputMethod(v);
             }
         });
-        mBackgroundTransition = (TransitionDrawable) getBackground();
+        this.mCollapsedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent));
+        this.mExpandedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), R.color.default_color_expanded));
+        mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
         mBackgroundTransition.setCrossFadeEnabled(true);
+        setBackground(mBackgroundTransition);
+        Utils.setPaddingAll(SearchViewLayout.this, 8);
         super.onFinishInflate();
     }
 
@@ -222,10 +237,20 @@ public class SearchViewLayout extends FrameLayout {
         this.mToolbar = toolbar;
     }
 
+    public void setTransitionDrawables(Drawable collapsedDrawable, Drawable expandedDrawable) {
+        this.mCollapsedDrawable = collapsedDrawable;
+        this.mExpandedDrawable = expandedDrawable;
+
+        mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
+        mBackgroundTransition.setCrossFadeEnabled(true);
+        setBackground(mBackgroundTransition);
+        Utils.setPaddingAll(SearchViewLayout.this, 8);
+    }
+
     public void expand(boolean requestFocus) {
         mCollapsedHeight = getHeight();
         toggleToolbar(true);
-        mBackgroundTransition.startTransition(ANIMATION_DURATION);
+        if (mBackgroundTransition != null) mBackgroundTransition.startTransition(ANIMATION_DURATION);
         updateVisibility(true /* isExpand */);
         mIsExpanded = true;
 
@@ -240,7 +265,7 @@ public class SearchViewLayout extends FrameLayout {
 
     public void collapse() {
         toggleToolbar(false);
-        mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
+        if (mBackgroundTransition != null) mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
         mSearchEditText.setText(null);
         updateVisibility(false /* isExpand */);
         mIsExpanded = false;
@@ -261,6 +286,10 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     private void hideContentFragment() {
+        if (mFragmentManager == null) {
+            Log.e(LOG_TAG, "Fragment Manager is null. Returning");
+            return;
+        }
         final FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.remove(mExpandedContentFragment).commit();
     }

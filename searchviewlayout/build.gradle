@@ -13,7 +13,7 @@ ext {
     siteUrl = 'https://github.com/sahildave/Search-View-Layout'
     gitUrl = 'https://github.com/sahildave/Search-View-Layout.git'
 
-    libraryVersion = '0.0.1'
+    libraryVersion = '0.0.2'
 
     developerId = 'sahildave'
     developerName = 'Sahil Dave'
@@ -32,7 +32,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "0.0.1"
+        versionName "0.0.2"
     }
 }
 

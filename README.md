@@ -12,6 +12,17 @@ If you want to animate your Toolbar too like the demo gif, you can enable it by 
 
     searchViewLayout.handleToolbarAnimation(toolbar);
 
+Setting Background colors for Transition. Default should also work just fine:
+
+    // Create Drawable for collapsed state. Default color is android.R.color.transparent
+    ColorDrawable collapsed = new ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary));
+    
+    // Create Drawable for expanded state. Default color is #F0F0F0
+    ColorDrawable expanded = new ColorDrawable(ContextCompat.getColor(this, R.color.default_color_expanded));
+    
+    // Send both colors to searchViewLayout
+    searchViewLayout.setTransitionDrawables(collapsed, expanded);
+
 Listen to search complete by:
 
     searchViewLayout.setSearchListener(new SearchViewLayout.SearchListener() {
@@ -47,12 +58,17 @@ Listen to layout collapse/expand by using `setOnToggleVisibilityListener`. For e
 Available at jCenter and mavenCentral.
 
     dependencies {
-        compile 'xyz.sahildave:searchviewlayout:0.0.1'
+        compile 'xyz.sahildave:searchviewlayout:0.0.2'
     }
+    
+### CHANGELOG
+
+#### 0.0.2
+
+* Added API `setTransitionDrawables`
 
 ### TODO
 
-* Make view transition background programatically by asking for startColor and endColor
 * API for setting icons
 * Granular setPadding using `onAnimationUpdate`
 
