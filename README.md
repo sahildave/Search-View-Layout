@@ -1,18 +1,19 @@
-Implementation of <b>Lollipop+ Dialer</b> and <b>Google Maps.</b>
+Implementation of **Lollipop+ Dialer** and **Google Maps**.
 
-Added to your layout by
+**Add** to your layout by
 
     <include layout="@layout/widget_search_bar"/>
+---
 
-This overlays the full activity and shows the fragment which you have assigned by using `setExpandedContentFragment`.
+This overlays the full activity and shows the **fragment** which you have assigned by using `setExpandedContentFragment`.
 
     searchViewLayout.setExpandedContentFragment(this, new SearchStaticFragment());
-
-If you want to animate your Toolbar too like the demo gif, you can enable it by using `handleToolbarAnimation`.
+---
+If you want to **animate your Toolbar** too like the demo gif, you can enable it by using `handleToolbarAnimation`.
 
     searchViewLayout.handleToolbarAnimation(toolbar);
-
-Setting Background colors for Transition. Default should also work just fine:
+---
+Setting **Background colors for Transition**. Default should also work just fine:
 
     // Create Drawable for collapsed state. Default color is android.R.color.transparent
     ColorDrawable collapsed = new ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary));
@@ -22,8 +23,8 @@ Setting Background colors for Transition. Default should also work just fine:
     
     // Send both colors to searchViewLayout
     searchViewLayout.setTransitionDrawables(collapsed, expanded);
-
-Listen to search complete by:
+---
+**Listen to search** complete by:
 
     searchViewLayout.setSearchListener(new SearchViewLayout.SearchListener() {
         @Override
@@ -33,9 +34,9 @@ Listen to search complete by:
         }
     });
     
-Listen to layout collapse/expand by using `setOnToggleVisibilityListener`. For eg the FAB in demo hides on expanded and shows on collapse.
+**Listen to collapse/expand animation** by using `setOnToggleAnimationListener`. For eg the FAB in demo hides on expanded and shows on collapse.
 
-    searchViewLayout.setOnToggleVisibilityListener(new SearchViewLayout.OnToggleVisibilityListener() {
+    searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnimationListener() {
         @Override
         public void onStart(boolean expanded) {
             if(expanded) {
