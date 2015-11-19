@@ -27,9 +27,11 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -151,10 +153,12 @@ public class SearchViewLayout extends FrameLayout {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         mBackButtonView.setOnClickListener(new OnClickListener() {
@@ -231,6 +235,12 @@ public class SearchViewLayout extends FrameLayout {
         mExpandedContentFragment = contentFragment;
         mFragmentManager = activity.getFragmentManager();
         mExpandedHeight = Utils.getSizeOfScreen(activity).y;
+    }
+
+    public void setSearchViewHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mSearchEditText.setHint(searchViewHint);
+        }
     }
 
     public void handleToolbarAnimation(Toolbar toolbar) {

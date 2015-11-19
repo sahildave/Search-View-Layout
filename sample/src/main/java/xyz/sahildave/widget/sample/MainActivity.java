@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         final SearchViewLayout searchViewLayout = (SearchViewLayout) findViewById(R.id.search_view_container);
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticFragment());
+        searchViewLayout.setSearchViewHint("Search view hint");
         searchViewLayout.handleToolbarAnimation(toolbar);
         ColorDrawable collapsed = new ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary));
         ColorDrawable expanded = new ColorDrawable(ContextCompat.getColor(this, R.color.default_color_expanded));
