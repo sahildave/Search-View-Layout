@@ -10,5 +10,5 @@
     <color name="search_shortcut_background_color">#b6b6b6</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>
 
-    <color name="default_color">#F0F0F0</color>
+    <color name="default_color_expanded">#F0F0F0</color>
 </resources>

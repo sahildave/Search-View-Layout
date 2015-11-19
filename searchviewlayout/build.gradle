@@ -1,5 +1,29 @@
 apply plugin: 'com.android.library'
 
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'Search-View-Layout'
+
+    publishedGroupId = 'xyz.sahildave'
+    libraryName = 'Search-View-Layout'
+    artifact = 'searchviewlayout'
+
+    libraryDescription = 'Search View Layout like Lollipop Dialer'
+
+    siteUrl = 'https://github.com/sahildave/Search-View-Layout'
+    gitUrl = 'https://github.com/sahildave/Search-View-Layout.git'
+
+    libraryVersion = '0.0.2'
+
+    developerId = 'sahildave'
+    developerName = 'Sahil Dave'
+    developerEmail = 'sahildave1991@gmail.com'
+
+    licenseName = 'GNU GENERAL PUBLIC LICENSE, Version 2.0'
+    licenseUrl = 'https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html#SEC1'
+    allLicenses = ["GPL-2.0"]
+}
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -8,13 +32,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        versionName "0.0.2"
     }
 }
 
@@ -23,3 +41,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.0'
     compile 'com.android.support:cardview-v7:23.1.0'
 }
+
+apply from: '../install.gradle'
+apply from: '../bintray.gradle'

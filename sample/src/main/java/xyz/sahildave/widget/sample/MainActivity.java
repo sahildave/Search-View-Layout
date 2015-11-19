@@ -1,8 +1,10 @@
 package xyz.sahildave.widget.sample;
 
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -31,17 +33,20 @@ public class MainActivity extends AppCompatActivity {
         final SearchViewLayout searchViewLayout = (SearchViewLayout) findViewById(R.id.search_view_container);
         searchViewLayout.setExpandedContentFragment(this, new SearchStaticFragment());
         searchViewLayout.handleToolbarAnimation(toolbar);
+        ColorDrawable collapsed = new ColorDrawable(ContextCompat.getColor(this, R.color.colorPrimary));
+        ColorDrawable expanded = new ColorDrawable(ContextCompat.getColor(this, R.color.default_color_expanded));
+        searchViewLayout.setTransitionDrawables(collapsed, expanded);
         searchViewLayout.setSearchListener(new SearchViewLayout.SearchListener() {
             @Override
             public void onFinished(String searchKeyword) {
                 searchViewLayout.collapse();
-                Snackbar.make(searchViewLayout, "Search Done - " + searchKeyword, Snackbar.LENGTH_LONG).show();
+                Snackbar.make(searchViewLayout, "Start Search for - " + searchKeyword, Snackbar.LENGTH_LONG).show();
             }
         });
-        searchViewLayout.setOnToggleVisibilityListener(new SearchViewLayout.OnToggleVisibilityListener() {
+        searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnimationListener() {
             @Override
             public void onStart(boolean expanded) {
-                if(expanded) {
+                if (expanded) {
                     fab.hide();
                 } else {
                     fab.show();

@@ -24,11 +24,15 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,17 +59,20 @@ public class SearchViewLayout extends FrameLayout {
     private int toolbarExpandedHeight = 0;
 
     private ValueAnimator mAnimator;
-    private OnToggleVisibilityListener mOnToggleVisibilityListener;
+    private OnToggleAnimationListener mOnToggleAnimationListener;
     private SearchListener mSearchListener;
     private Fragment mExpandedContentFragment;
     private FragmentManager mFragmentManager;
     private TransitionDrawable mBackgroundTransition;
     private Toolbar mToolbar;
 
+    private Drawable mCollapsedDrawable;
+    private Drawable mExpandedDrawable;
+
     private int mExpandedHeight;
     private int mCollapsedHeight;
 
-    public interface OnToggleVisibilityListener {
+    public interface OnToggleAnimationListener {
         void onStart(boolean expanded);
         void onFinish(boolean expanded);
     }
@@ -78,8 +85,8 @@ public class SearchViewLayout extends FrameLayout {
         super(context, attrs);
     }
 
-    public void setOnToggleVisibilityListener(OnToggleVisibilityListener listener) {
-        mOnToggleVisibilityListener = listener;
+    public void setOnToggleAnimationListener(OnToggleAnimationListener listener) {
+        mOnToggleAnimationListener = listener;
     }
 
     public void setSearchListener(SearchListener listener) {
@@ -126,7 +133,8 @@ public class SearchViewLayout extends FrameLayout {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    search(v);
+                    callSearchListener();
+                    Utils.hideInputMethod(v);
                     return true;
                 }
                 return false;
@@ -134,24 +142,19 @@ public class SearchViewLayout extends FrameLayout {
         });
         mSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mSearchEditText.getText().length() > 0) {
-                    mExpandedSearchIcon.setVisibility(View.VISIBLE);
-                }
-                else {
-                    mExpandedSearchIcon.setVisibility(View.INVISIBLE);
+                    Utils.fadeIn(mExpandedSearchIcon, ANIMATION_DURATION);
+                } else {
+                    Utils.fadeOut(mExpandedSearchIcon, ANIMATION_DURATION);
                 }
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
 
-            }
+            @Override
+            public void afterTextChanged(Editable s) { }
         });
 
         mBackButtonView.setOnClickListener(new OnClickListener() {
@@ -164,21 +167,25 @@ public class SearchViewLayout extends FrameLayout {
         mExpandedSearchIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                search(v);
+                callSearchListener();
+                Utils.hideInputMethod(v);
             }
         });
-        mBackgroundTransition = (TransitionDrawable) getBackground();
+        this.mCollapsedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent));
+        this.mExpandedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), R.color.default_color_expanded));
+        mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
         mBackgroundTransition.setCrossFadeEnabled(true);
+        setBackground(mBackgroundTransition);
+        Utils.setPaddingAll(SearchViewLayout.this, 8);
         super.onFinishInflate();
     }
 
-    private void search(View focusedView) {
+    private void callSearchListener() {
         Editable editable = mSearchEditText.getText();
         if (editable != null && editable.length() > 0) {
             if (mSearchListener != null) {
                 mSearchListener.onFinished(editable.toString());
             }
-            Utils.hideInputMethod(focusedView);
         }
     }
 
@@ -230,10 +237,20 @@ public class SearchViewLayout extends FrameLayout {
         this.mToolbar = toolbar;
     }
 
+    public void setTransitionDrawables(Drawable collapsedDrawable, Drawable expandedDrawable) {
+        this.mCollapsedDrawable = collapsedDrawable;
+        this.mExpandedDrawable = expandedDrawable;
+
+        mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
+        mBackgroundTransition.setCrossFadeEnabled(true);
+        setBackground(mBackgroundTransition);
+        Utils.setPaddingAll(SearchViewLayout.this, 8);
+    }
+
     public void expand(boolean requestFocus) {
         mCollapsedHeight = getHeight();
         toggleToolbar(true);
-        mBackgroundTransition.startTransition(ANIMATION_DURATION);
+        if (mBackgroundTransition != null) mBackgroundTransition.startTransition(ANIMATION_DURATION);
         updateVisibility(true /* isExpand */);
         mIsExpanded = true;
 
@@ -248,7 +265,7 @@ public class SearchViewLayout extends FrameLayout {
 
     public void collapse() {
         toggleToolbar(false);
-        mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
+        if (mBackgroundTransition != null) mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
         mSearchEditText.setText(null);
         updateVisibility(false /* isExpand */);
         mIsExpanded = false;
@@ -269,6 +286,10 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     private void hideContentFragment() {
+        if (mFragmentManager == null) {
+            Log.e(LOG_TAG, "Fragment Manager is null. Returning");
+            return;
+        }
         final FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.remove(mExpandedContentFragment).commit();
     }
@@ -329,8 +350,8 @@ public class SearchViewLayout extends FrameLayout {
                 } else {
                     Utils.setPaddingAll(SearchViewLayout.this, 8);
                 }
-                if (mOnToggleVisibilityListener != null)
-                    mOnToggleVisibilityListener.onFinish(expand);
+                if (mOnToggleAnimationListener != null)
+                    mOnToggleAnimationListener.onFinish(expand);
             }
 
             @Override
@@ -341,8 +362,8 @@ public class SearchViewLayout extends FrameLayout {
                     params.height = mCollapsedHeight;
                     setLayoutParams(params);
                 }
-                if (mOnToggleVisibilityListener != null)
-                    mOnToggleVisibilityListener.onStart(expand);
+                if (mOnToggleAnimationListener != null)
+                    mOnToggleAnimationListener.onStart(expand);
             }
         });
 
