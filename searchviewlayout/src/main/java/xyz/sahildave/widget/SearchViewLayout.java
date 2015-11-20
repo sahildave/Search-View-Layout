@@ -39,6 +39,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SearchViewLayout extends FrameLayout {
@@ -380,5 +381,15 @@ public class SearchViewLayout extends FrameLayout {
 
     public boolean isExpanded() {
         return mIsExpanded;
+    }
+
+    /**
+     * Allow user to set a customised search icon
+     * @param iconResource
+     */
+    public void setSearchIcon(int iconResource){
+
+        ImageView searchImageView=(ImageView)mSearchIcon;
+        searchImageView.setImageResource(iconResource);
     }
 }
