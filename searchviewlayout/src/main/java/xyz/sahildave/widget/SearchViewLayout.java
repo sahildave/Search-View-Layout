@@ -27,6 +27,8 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
+import android.media.Image;
+import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -39,6 +41,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -75,6 +78,7 @@ public class SearchViewLayout extends FrameLayout {
 
     public interface OnToggleAnimationListener {
         void onStart(boolean expanded);
+
         void onFinish(boolean expanded);
     }
 
@@ -152,10 +156,12 @@ public class SearchViewLayout extends FrameLayout {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
 
         mBackButtonView.setOnClickListener(new OnClickListener() {
@@ -221,8 +227,9 @@ public class SearchViewLayout extends FrameLayout {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN &&
                     isExpanded()) {
                 boolean keyboardHidden = Utils.hideInputMethod(v);
-                if(keyboardHidden) return true;
-                collapse(); return true;
+                if (keyboardHidden) return true;
+                collapse();
+                return true;
             }
             return false;
         }
@@ -251,7 +258,8 @@ public class SearchViewLayout extends FrameLayout {
     public void expand(boolean requestFocus) {
         mCollapsedHeight = getHeight();
         toggleToolbar(true);
-        if (mBackgroundTransition != null) mBackgroundTransition.startTransition(ANIMATION_DURATION);
+        if (mBackgroundTransition != null)
+            mBackgroundTransition.startTransition(ANIMATION_DURATION);
         updateVisibility(true /* isExpand */);
         mIsExpanded = true;
 
@@ -266,7 +274,8 @@ public class SearchViewLayout extends FrameLayout {
 
     public void collapse() {
         toggleToolbar(false);
-        if (mBackgroundTransition != null) mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
+        if (mBackgroundTransition != null)
+            mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
         mSearchEditText.setText(null);
         updateVisibility(false /* isExpand */);
         mIsExpanded = false;
@@ -296,7 +305,7 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     private void toggleToolbar(boolean expanding) {
-        if(mToolbar == null) return;
+        if (mToolbar == null) return;
 
         mToolbar.clearAnimation();
         if (expanding) {
@@ -358,7 +367,7 @@ public class SearchViewLayout extends FrameLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 super.onAnimationStart(animation);
-                if(!expand) {
+                if (!expand) {
                     ViewGroup.LayoutParams params = getLayoutParams();
                     params.height = mCollapsedHeight;
                     setLayoutParams(params);
@@ -384,12 +393,23 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     /**
-     * Allow user to set a customised search icon
-     * @param iconResource
+     * Allow user to set a customised search icon in the un-expended view
+     *
+     * @param iconResource resource id of icon
      */
-    public void setSearchIcon(int iconResource){
-
-        ImageView searchImageView=(ImageView)mSearchIcon;
+    public void setSearchIcon(@DrawableRes int iconResource) {
+        ImageView searchImageView = (ImageView) mSearchIcon;
         searchImageView.setImageResource(iconResource);
+    }
+
+    /**
+     * Allow user to set a customised back icon in the expended view
+     *
+     * @param iconResource resource id of icon
+     */
+    public void setBackIcon(@DrawableRes int iconResource) {
+        ImageButton back = (ImageButton) mBackButtonView;
+        back.setImageResource(iconResource);
+
     }
 }
