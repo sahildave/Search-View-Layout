@@ -63,6 +63,15 @@ searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnima
     public void onFinish(boolean expanded) { }
 });
 ```
+**Setting Hints**
+
+If you want to set hints in the view, there are three APIs. `setCollapsedHint` would come up in the default/collapsed state. `setExpandedHint` would work for expanded state i.e. after click the view and the keyboard is up. `setHint` would set both the hints in one go, use this you want to show the same hint in both the states.
+
+``` java
+searchViewLayout.setCollapsedHint("Collapsed Hint");
+searchViewLayout.setExpandedHint("Expanded Hint");
+searchViewLayout.setHint("Global Hint");
+```
 
 ### NOTES
 
@@ -81,13 +90,12 @@ searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnima
     
     ```
 
-~~2. The default height of the view is `120dp` which is also present in the dimens.xml file as
+2. The default height of the view is `120dp` which is also present in the dimens.xml file as
     ``` xml     
     <dimen name="search_view_layout_approx_height">120dp</dimen>
     ```
-    You can use it for adding margin on top of your main content layout.~~
+    You can use it for adding margin on top of your main content layout.
     
-*Updated in project but not release yet.*
 
 ## DEMO
 
@@ -99,15 +107,20 @@ Available at jCenter and mavenCentral.
 
 ``` groovy
 dependencies {
-    compile 'xyz.sahildave:searchviewlayout:0.0.2'
+    compile 'xyz.sahildave:searchviewlayout:0.1'
 }
 ```
     
 ### CHANGELOG
 
+### 0.1
+
+* Added hints API.
+* Added `search_view_layout_approx_height` 
+
 #### 0.0.2
 
-* Added API `setTransitionDrawables`
+* Added API `setTransitionDrawables` which solves crashes in < API 19
 
 ### TODO
 

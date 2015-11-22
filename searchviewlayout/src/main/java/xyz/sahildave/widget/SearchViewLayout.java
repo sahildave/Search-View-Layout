@@ -71,6 +71,7 @@ public class SearchViewLayout extends FrameLayout {
 
     private int mExpandedHeight;
     private int mCollapsedHeight;
+    private TextView mCollapsedHintView;
 
     public interface OnToggleAnimationListener {
         void onStart(boolean expanded);
@@ -98,6 +99,7 @@ public class SearchViewLayout extends FrameLayout {
         mCollapsed = (ViewGroup) findViewById(R.id.search_box_collapsed);
         mSearchIcon = findViewById(R.id.search_magnifying_glass);
         mCollapsedSearchBox = findViewById(R.id.search_box_start_search);
+        mCollapsedHintView = (TextView) findViewById(R.id.search_box_collapsed_hint);
 
         mExpanded = (ViewGroup) findViewById(R.id.search_expanded_root);
         mSearchEditText = (EditText) mExpanded.findViewById(R.id.search_expanded_edit_text);
@@ -275,6 +277,25 @@ public class SearchViewLayout extends FrameLayout {
         prepareAnimator(false);
 
         hideContentFragment();
+    }
+
+    public void setHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mCollapsedHintView.setHint(searchViewHint);
+            mSearchEditText.setHint(searchViewHint);
+        }
+    }
+
+    public void setCollapsedHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mCollapsedHintView.setHint(searchViewHint);
+        }
+    }
+
+    public void setExpandedHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mSearchEditText.setHint(searchViewHint);
+        }
     }
 
     private void showContentFragment() {
