@@ -1,0 +1,6 @@
+<ListView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_static_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"/>

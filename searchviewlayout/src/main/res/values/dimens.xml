@@ -32,4 +32,8 @@
     <dimen name="search_box_text_left_margin">8dp</dimen>
     <!-- Search box text size -->
     <dimen name="search_text_size">20sp</dimen>
+
+    <!-- Approx Size of the layout. This is not used anywhere in layouts
+            but can be used to give margin on the main activity. -->
+    <dimen name="search_view_layout_approx_height">120dp</dimen>
 </resources>

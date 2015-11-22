@@ -64,6 +64,31 @@ searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnima
 });
 ```
 
+### NOTES
+
+1. If you want to add a scrolling widget in your `setExpandedContentFragment`, add a `onTouchListener` and disallow the parent intercept by using`v.getParent().requestDisallowInterceptTouchEvent(true);`Check out fragments in sample for the implement of ListView, RecyclerView and ScrollView.
+
+    ``` java
+    recyclerView.setOnTouchListener(new View.OnTouchListener() {
+        // Setting on Touch Listener for handling the touch inside ScrollView
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            // Disallow the touch request for parent scroll on touch of child view
+            v.getParent().requestDisallowInterceptTouchEvent(true);
+            return false;
+        }
+    });
+    
+    ```
+
+~~2. The default height of the view is `120dp` which is also present in the dimens.xml file as
+    ``` xml     
+    <dimen name="search_view_layout_approx_height">120dp</dimen>
+    ```
+    You can use it for adding margin on top of your main content layout.~~
+    
+*Updated in project but not release yet.*
+
 ## DEMO
 
 ![Screenshot](/demo.gif?raw=true)
