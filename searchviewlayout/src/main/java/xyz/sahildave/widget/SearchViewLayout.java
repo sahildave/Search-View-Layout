@@ -392,23 +392,31 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     /**
-     * Allow user to set a customised search icon in the un-expended view
+     * Allow user to set a search icon in the un-expended view
      *
      * @param iconResource resource id of icon
      */
-    public void setSearchIcon(@DrawableRes int iconResource) {
-        ImageView searchImageView = (ImageView) mSearchIcon;
-        searchImageView.setImageResource(iconResource);
+    public void setCollapsedIcon(@DrawableRes int iconResource) {
+        ((ImageView)mSearchIcon).setImageResource(iconResource);
+
     }
 
     /**
-     * Allow user to set a customised back icon in the expended view
+     * Allow user to set a back icon in the expended view
      *
      * @param iconResource resource id of icon
      */
-    public void setBackIcon(@DrawableRes int iconResource) {
-        ImageButton back = (ImageButton) mBackButtonView;
-        back.setImageResource(iconResource);
-
+    public void setExpandedBackIcon(@DrawableRes int iconResource) {
+        ((ImageView)mBackButtonView).setImageResource(iconResource);
     }
+
+    /**
+     * Allow user to set a search icon in the expended view
+     *
+     * @param iconResource resource id of icon
+     */
+    public void setExpandedSearchIcon(@DrawableRes int iconResource) {
+        ((ImageView)mExpandedSearchIcon).setImageResource(iconResource);
+    }
+
 }
