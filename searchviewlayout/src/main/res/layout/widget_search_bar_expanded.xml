@@ -15,7 +15,6 @@
         android:id="@+id/search_expanded_box"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:paddingRight="@dimen/search_box_right_padding"
         android:background="@drawable/rounded_corners"
         android:orientation="horizontal"
         android:gravity="center_vertical" >

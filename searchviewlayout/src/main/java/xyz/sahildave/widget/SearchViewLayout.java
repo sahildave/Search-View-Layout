@@ -44,7 +44,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class SearchViewLayout extends FrameLayout {
-    public static final int ANIMATION_DURATION = 150;
+    public static int ANIMATION_DURATION = 1500;
     private static final String LOG_TAG = SearchViewLayout.class.getSimpleName();
 
     private boolean mIsExpanded = false;
@@ -103,6 +103,7 @@ public class SearchViewLayout extends FrameLayout {
 
     public SearchViewLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
+        ANIMATION_DURATION = context.getResources().getInteger(R.integer.animation_duration);
     }
 
     @Override
@@ -277,12 +278,10 @@ public class SearchViewLayout extends FrameLayout {
         toggleToolbar(true);
         if (mBackgroundTransition != null)
             mBackgroundTransition.startTransition(ANIMATION_DURATION);
-        updateVisibility(true /* isExpand */);
         mIsExpanded = true;
 
+        animateStates(true, 1f, 0f);
         Utils.crossFadeViews(mExpanded, mCollapsed, ANIMATION_DURATION);
-        mAnimator = ValueAnimator.ofFloat(1f, 0f);
-        prepareAnimator(true);
 
         if (requestFocus) {
             mSearchEditText.requestFocus();
@@ -294,12 +293,10 @@ public class SearchViewLayout extends FrameLayout {
         if (mBackgroundTransition != null)
             mBackgroundTransition.reverseTransition(ANIMATION_DURATION);
         mSearchEditText.setText(null);
-        updateVisibility(false /* isExpand */);
         mIsExpanded = false;
 
+        animateStates(false, 0f, 1f);
         Utils.crossFadeViews(mCollapsed, mExpanded, ANIMATION_DURATION);
-        mAnimator = ValueAnimator.ofFloat(0f, 1f);
-        prepareAnimator(false);
 
         hideContentFragment();
     }
@@ -338,7 +335,7 @@ public class SearchViewLayout extends FrameLayout {
 
     private void showContentFragment() {
         final FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
         transaction.replace(R.id.search_expanded_content, mExpandedContentFragment);
         mExpandedContentFragment.setHasOptionsMenu(false);
         transaction.commit();
@@ -375,37 +372,20 @@ public class SearchViewLayout extends FrameLayout {
                 ANIMATION_DURATION);
     }
 
-    /**
-     * Updates the visibility of views depending on whether we will show the expanded or collapsed
-     * search view. This helps prevent some jank with the crossfading if we are animating.
-     *
-     * @param isExpand Whether we are about to show the expanded search box.
-     */
-    private void updateVisibility(boolean isExpand) {
-        int collapsedViewVisibility = isExpand ? View.GONE : View.VISIBLE;
-        int expandedViewVisibility = isExpand ? View.VISIBLE : View.GONE;
-
-        mSearchIcon.setVisibility(collapsedViewVisibility);
-        mCollapsedSearchBox.setVisibility(collapsedViewVisibility);
-        mBackButtonView.setVisibility(expandedViewVisibility);
-    }
-
-    private void prepareAnimator(final boolean expand) {
-        if (mAnimator != null) {
-            mAnimator.cancel();
-        }
+    private void animateStates(final boolean expand, final float start, final float end) {
+        mAnimator = ValueAnimator.ofFloat(start, end);
+        mAnimator.cancel();
 
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (expand) {
+                    Utils.setPaddingAll(SearchViewLayout.this, 0);
                     showContentFragment();
 
                     ViewGroup.LayoutParams params = getLayoutParams();
                     params.height = mExpandedHeight;
                     setLayoutParams(params);
-
-                    Utils.setPaddingAll(SearchViewLayout.this, 0);
                 } else {
                     Utils.setPaddingAll(SearchViewLayout.this, 8);
                 }
@@ -429,7 +409,9 @@ public class SearchViewLayout extends FrameLayout {
         mAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-
+                int padding = (int) (8 * animation.getAnimatedFraction());
+                if (expand) padding = 8 - padding;
+                Utils.setPaddingAll(SearchViewLayout.this, padding);
             }
         });
 
