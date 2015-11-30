@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context="xyz.sahildave.widget.MainActivity">
 
+    <include layout="@layout/content_main"/>
     <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
@@ -23,8 +24,6 @@
         <include layout="@layout/widget_search_bar"/>
 
     </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_main"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"

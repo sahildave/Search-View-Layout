@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 
+def mLibraryVersion = 0.2
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'Search-View-Layout'
@@ -13,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/sahildave/Search-View-Layout'
     gitUrl = 'https://github.com/sahildave/Search-View-Layout.git'
 
-    libraryVersion = '0.1'
+    libraryVersion = "${mLibraryVersion}"
 
     developerId = 'sahildave'
     developerName = 'Sahil Dave'
@@ -32,7 +33,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "0.1"
+        versionName "${mLibraryVersion}"
     }
 }
 
