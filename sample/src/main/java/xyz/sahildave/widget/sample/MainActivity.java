@@ -49,8 +49,8 @@ public class MainActivity extends AppCompatActivity {
         });
         searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnimationListener() {
             @Override
-            public void onStart(boolean expanded) {
-                if (expanded) {
+            public void onStart(boolean expanding) {
+                if (expanding) {
                     fab.hide();
                 } else {
                     fab.show();

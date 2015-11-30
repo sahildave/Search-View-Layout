@@ -40,7 +40,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -48,8 +47,7 @@ public class SearchViewLayout extends FrameLayout {
     public static final int ANIMATION_DURATION = 150;
     private static final String LOG_TAG = SearchViewLayout.class.getSimpleName();
 
-    /* Subclass-visible for testing */
-    protected boolean mIsExpanded = false;
+    private boolean mIsExpanded = false;
 
     private ViewGroup mCollapsed;
     private ViewGroup mExpanded;
@@ -76,18 +74,23 @@ public class SearchViewLayout extends FrameLayout {
     private int mCollapsedHeight;
     private TextView mCollapsedHintView;
 
+    /***
+     * Interface for listening to animation start and finish.
+     * expanding and expanded tell the current state of animation.
+     */
     public interface OnToggleAnimationListener {
-        void onStart(boolean expanded);
+        void onStart(boolean expanding);
 
         void onFinish(boolean expanded);
     }
 
+    /***
+     * Interface for listening to search finish call.
+     * Called on clicking of search button on keyboard and {@link #mExpandedSearchIcon}
+     */
+
     public interface SearchListener {
         void onFinished(String searchKeyword);
-    }
-
-    public SearchViewLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
     }
 
     public void setOnToggleAnimationListener(OnToggleAnimationListener listener) {
@@ -96,6 +99,10 @@ public class SearchViewLayout extends FrameLayout {
 
     public void setSearchListener(SearchListener listener) {
         mSearchListener = listener;
+    }
+
+    public SearchViewLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
     }
 
     @Override
@@ -179,62 +186,32 @@ public class SearchViewLayout extends FrameLayout {
                 Utils.hideInputMethod(v);
             }
         });
-        this.mCollapsedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent));
-        this.mExpandedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), R.color.default_color_expanded));
+
+        mCollapsedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), android.R.color.transparent));
+        mExpandedDrawable = new ColorDrawable(ContextCompat.getColor(getContext(), R.color.default_color_expanded));
         mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
         mBackgroundTransition.setCrossFadeEnabled(true);
+
         setBackground(mBackgroundTransition);
         Utils.setPaddingAll(SearchViewLayout.this, 8);
+
         super.onFinishInflate();
     }
 
-    private void callSearchListener() {
-        Editable editable = mSearchEditText.getText();
-        if (editable != null && editable.length() > 0) {
-            if (mSearchListener != null) {
-                mSearchListener.onFinished(editable.toString());
-            }
-        }
+    /***
+     * Should toolbar be animated, y position.
+     * @param toolbar current toolbar which needs to be animated.
+     */
+
+    public void handleToolbarAnimation(Toolbar toolbar) {
+        this.mToolbar = toolbar;
     }
 
-    @Override
-    public boolean dispatchKeyEventPreIme(KeyEvent event) {
-        if (mSearchEditTextLayoutListener != null) {
-            if (mSearchEditTextLayoutListener.onKey(this, event.getKeyCode(), event)) {
-                return true;
-            }
-        }
-        return super.dispatchKeyEventPreIme(event);
-    }
-
-    /**
-     * Open the search UI when the user clicks on the search box.
+    /***
+     * Set the fragment which would be shown in the expanded state
+     * @param activity to get fragment manager
+     * @param contentFragment fragment which needs to be shown.
      */
-    private final View.OnClickListener mSearchViewOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (!mIsExpanded) {
-                expand(true);
-            }
-        }
-    };
-
-    /**
-     * If the search term is empty and the user closes the soft keyboard, close the search UI.
-     */
-    private final View.OnKeyListener mSearchEditTextLayoutListener = new View.OnKeyListener() {
-        @Override
-        public boolean onKey(View v, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN &&
-                    isExpanded()) {
-                boolean keyboardHidden = Utils.hideInputMethod(v);
-                if (keyboardHidden) return true;
-                collapse();
-                return true;
-            }
-            return false;
-        }
-    };
 
     public void setExpandedContentFragment(Activity activity, Fragment contentFragment) {
         mExpandedContentFragment = contentFragment;
@@ -242,10 +219,11 @@ public class SearchViewLayout extends FrameLayout {
         mExpandedHeight = Utils.getSizeOfScreen(activity).y;
     }
 
-    public void handleToolbarAnimation(Toolbar toolbar) {
-        this.mToolbar = toolbar;
-    }
-
+    /***
+     * Set the background colours of the searchview.
+     * @param collapsedDrawable drawable for collapsed state, default transparent
+     * @param expandedDrawable drawable for expanded state, default color.default_color_expanded
+     */
     public void setTransitionDrawables(Drawable collapsedDrawable, Drawable expandedDrawable) {
         this.mCollapsedDrawable = collapsedDrawable;
         this.mExpandedDrawable = expandedDrawable;
@@ -254,6 +232,44 @@ public class SearchViewLayout extends FrameLayout {
         mBackgroundTransition.setCrossFadeEnabled(true);
         setBackground(mBackgroundTransition);
         Utils.setPaddingAll(SearchViewLayout.this, 8);
+    }
+
+    /***
+     * Set hint in the collapsed state
+     *
+     * Also see {@link #setHint(String)}
+     * @param searchViewHint
+     */
+    public void setCollapsedHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mCollapsedHintView.setHint(searchViewHint);
+        }
+    }
+
+    /***
+     * Set hint in the expanded state
+     *
+     * Also see {@link #setHint(String)}
+     * @param searchViewHint
+     */
+    public void setExpandedHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mSearchEditText.setHint(searchViewHint);
+        }
+    }
+
+    /***
+     * Overrides both, {@link #setCollapsedHint(String)} and {@link #setExpandedHint(String)},
+     * and sets hint for both the views.
+     *
+     * Use this if you don't want to show different hints in both the states
+     * @param searchViewHint
+     */
+    public void setHint(String searchViewHint) {
+        if (searchViewHint != null) {
+            mCollapsedHintView.setHint(searchViewHint);
+            mSearchEditText.setHint(searchViewHint);
+        }
     }
 
     public void expand(boolean requestFocus) {
@@ -288,23 +304,36 @@ public class SearchViewLayout extends FrameLayout {
         hideContentFragment();
     }
 
-    public void setHint(String searchViewHint) {
-        if (searchViewHint != null) {
-            mCollapsedHintView.setHint(searchViewHint);
-            mSearchEditText.setHint(searchViewHint);
-        }
+    public boolean isExpanded() {
+        return mIsExpanded;
     }
 
-    public void setCollapsedHint(String searchViewHint) {
-        if (searchViewHint != null) {
-            mCollapsedHintView.setHint(searchViewHint);
-        }
+    /**
+     * Allow user to set a search icon in the collapsed view
+     *
+     * @param iconResource resource id of icon
+     */
+    public void setCollapsedIcon(@DrawableRes int iconResource) {
+        ((ImageView)mSearchIcon).setImageResource(iconResource);
+
     }
 
-    public void setExpandedHint(String searchViewHint) {
-        if (searchViewHint != null) {
-            mSearchEditText.setHint(searchViewHint);
-        }
+    /**
+     * Allow user to set a back icon in the expanded view
+     *
+     * @param iconResource resource id of icon
+     */
+    public void setExpandedBackIcon(@DrawableRes int iconResource) {
+        ((ImageView)mBackButtonView).setImageResource(iconResource);
+    }
+
+    /**
+     * Allow user to set a search icon in the expanded view
+     *
+     * @param iconResource resource id of icon
+     */
+    public void setExpandedSearchIcon(@DrawableRes int iconResource) {
+        ((ImageView)mExpandedSearchIcon).setImageResource(iconResource);
     }
 
     private void showContentFragment() {
@@ -408,36 +437,52 @@ public class SearchViewLayout extends FrameLayout {
         mAnimator.start();
     }
 
-    public boolean isExpanded() {
-        return mIsExpanded;
+    private void callSearchListener() {
+        Editable editable = mSearchEditText.getText();
+        if (editable != null && editable.length() > 0) {
+            if (mSearchListener != null) {
+                mSearchListener.onFinished(editable.toString());
+            }
+        }
+    }
+
+    @Override
+    public boolean dispatchKeyEventPreIme(KeyEvent event) {
+        if (mSearchEditTextLayoutListener != null) {
+            if (mSearchEditTextLayoutListener.onKey(this, event.getKeyCode(), event)) {
+                return true;
+            }
+        }
+        return super.dispatchKeyEventPreIme(event);
     }
 
     /**
-     * Allow user to set a search icon in the un-expended view
-     *
-     * @param iconResource resource id of icon
+     * Open the search UI when the user clicks on the search box.
      */
-    public void setCollapsedIcon(@DrawableRes int iconResource) {
-        ((ImageView)mSearchIcon).setImageResource(iconResource);
-
-    }
-
-    /**
-     * Allow user to set a back icon in the expended view
-     *
-     * @param iconResource resource id of icon
-     */
-    public void setExpandedBackIcon(@DrawableRes int iconResource) {
-        ((ImageView)mBackButtonView).setImageResource(iconResource);
-    }
+    private final View.OnClickListener mSearchViewOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!mIsExpanded) {
+                expand(true);
+            }
+        }
+    };
 
     /**
-     * Allow user to set a search icon in the expended view
-     *
-     * @param iconResource resource id of icon
+     * If the search term is empty and the user closes the soft keyboard, close the search UI.
      */
-    public void setExpandedSearchIcon(@DrawableRes int iconResource) {
-        ((ImageView)mExpandedSearchIcon).setImageResource(iconResource);
-    }
+    private final View.OnKeyListener mSearchEditTextLayoutListener = new View.OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN &&
+                    isExpanded()) {
+                boolean keyboardHidden = Utils.hideInputMethod(v);
+                if (keyboardHidden) return true;
+                collapse();
+                return true;
+            }
+            return false;
+        }
+    };
 
 }
