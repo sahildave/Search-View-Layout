@@ -1,5 +1,10 @@
 Implementation of **Lollipop+ Dialer** and **Google Maps**.
 
+## DEMO
+
+![Screenshot](/demo.gif?raw=true)
+
+
 #### Add in View
 Add to your layout by using the include tag.
 ``` xml
@@ -97,10 +102,6 @@ Use `setCollapsedIcon`, `setExpandedBackIcon`, `setExpandedSearchIcon` to setup 
     You can use it for adding margin on top of your main content layout.
     
 
-## DEMO
-
-![Screenshot](/demo.gif?raw=true)
-
 ### GET
 
 Available at jCenter and mavenCentral.
@@ -116,9 +117,11 @@ dependencies {
 ### 0.2
 * Added APIs for setting icons
 * Improved animations by using `onAnimationUpdate`
+ 
 ### 0.1
 * Added hints API.
 * Added `search_view_layout_approx_height` 
+
 #### 0.0.2
 * Added API `setTransitionDrawables` which solves crashes in < API 19
 
