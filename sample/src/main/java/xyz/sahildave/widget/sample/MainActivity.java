@@ -7,11 +7,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 
 import xyz.sahildave.widget.SearchViewLayout;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFinish(boolean expanded) { }
+        });
+        searchViewLayout.setSearchBoxListener(new SearchViewLayout.SearchBoxListener() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(TAG, "beforeTextChanged: " + s + "," + start + "," + count + "," + after);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: " + s + "," + start + "," + before + "," + count);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d(TAG, "afterTextChanged: " + s);
+            }
         });
     }
 }

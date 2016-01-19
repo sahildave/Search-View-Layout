@@ -31,6 +31,7 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
+import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -62,6 +63,7 @@ public class SearchViewLayout extends FrameLayout {
     private ValueAnimator mAnimator;
     private OnToggleAnimationListener mOnToggleAnimationListener;
     private SearchListener mSearchListener;
+    private SearchBoxListener mSearchBoxListener;
     private Fragment mExpandedContentFragment;
     private FragmentManager mFragmentManager;
     private TransitionDrawable mBackgroundTransition;
@@ -93,12 +95,27 @@ public class SearchViewLayout extends FrameLayout {
         void onFinished(String searchKeyword);
     }
 
+    /***
+     * Interface for listening to search edit text.
+     */
+
+    public interface SearchBoxListener {
+        void beforeTextChanged(CharSequence s, int start, int count, int after);
+        void onTextChanged(CharSequence s, int start, int before, int count);
+        void afterTextChanged(Editable s);
+    }
+
+
     public void setOnToggleAnimationListener(OnToggleAnimationListener listener) {
         mOnToggleAnimationListener = listener;
     }
 
     public void setSearchListener(SearchListener listener) {
         mSearchListener = listener;
+    }
+
+    public void setSearchBoxListener(SearchBoxListener listener) {
+        mSearchBoxListener = listener;
     }
 
     public SearchViewLayout(Context context, AttributeSet attrs) {
@@ -158,18 +175,23 @@ public class SearchViewLayout extends FrameLayout {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mSearchEditText.getText().length() > 0) {
-                    Utils.fadeIn(mExpandedSearchIcon, ANIMATION_DURATION);
+                    if (mExpandedSearchIcon.getVisibility() != View.VISIBLE) {
+                        Utils.fadeIn(mExpandedSearchIcon, ANIMATION_DURATION);
+                    }
                 } else {
                     Utils.fadeOut(mExpandedSearchIcon, ANIMATION_DURATION);
                 }
+                if(mSearchBoxListener!=null) mSearchBoxListener.onTextChanged(s, start, before, count);
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if(mSearchBoxListener!=null) mSearchBoxListener.beforeTextChanged(s, start, count, after);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                if(mSearchBoxListener!=null) mSearchBoxListener.afterTextChanged(s);
             }
         });
 

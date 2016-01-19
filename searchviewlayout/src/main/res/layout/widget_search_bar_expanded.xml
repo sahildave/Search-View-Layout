@@ -20,9 +20,8 @@
         android:gravity="center_vertical" >
         <ImageButton
             android:id="@+id/search_expanded_back_button"
-            android:layout_width="@dimen/search_box_icon_size"
-            android:layout_height="@dimen/search_box_icon_size"
-            android:layout_margin="@dimen/search_box_navigation_icon_margin"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_arrow_back"
             android:background="?attr/selectableItemBackgroundBorderless" />
         <EditText
@@ -38,17 +37,16 @@
             android:inputType="textFilter"
             android:singleLine="true"
             android:imeOptions="actionSearch" />
-        <ImageView
+        <ImageButton
             android:id="@+id/search_expanded_magnifying_glass"
-            android:layout_height="@dimen/search_box_icon_size"
-            android:layout_width="@dimen/search_box_icon_size"
-            android:layout_margin="@dimen/search_box_icon_margin"
-            android:padding="@dimen/search_box_search_icon_padding"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
             android:src="@drawable/ic_search"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:importantForAccessibility="no"
             android:tint="@color/searchbox_icon_tint"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            tools:visibility="visible"/>
     </LinearLayout>
 
     <FrameLayout
