@@ -67,6 +67,21 @@ searchViewLayout.setOnToggleAnimationListener(new SearchViewLayout.OnToggleAnima
 });
 ```
 ---
+**Listen to search box** complete by:
+``` java
+searchViewLayout.setSearchBoxListener(new SearchViewLayout.SearchBoxListener() {
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+    }
+    @Override
+    public void afterTextChanged(Editable s) {
+    }
+});
+```
+---
 **Setting Hints**
 
 If you want to set hints in the view, there are three APIs. `setCollapsedHint` would come up in the default/collapsed state. `setExpandedHint` would work for expanded state i.e. after click the view and the keyboard is up. `setHint` would set both the hints in one go, use this you want to show the same hint in both the states.
@@ -113,6 +128,10 @@ dependencies {
 ```
     
 ### CHANGELOG
+
+### 0.3
+* Added search edit text API
+* Larger touch target
 
 ### 0.2
 * Added APIs for setting icons
