@@ -129,6 +129,9 @@ dependencies {
     
 ### CHANGELOG
 
+### 0.4
+* Moved anim files to /animator res dir
+
 ### 0.3
 * Added search edit text API
 * Larger touch target

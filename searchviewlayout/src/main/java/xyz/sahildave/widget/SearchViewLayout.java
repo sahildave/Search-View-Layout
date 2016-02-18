@@ -31,7 +31,6 @@ import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -357,7 +356,7 @@ public class SearchViewLayout extends FrameLayout {
 
     private void showContentFragment() {
         final FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+        transaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
         transaction.replace(R.id.search_expanded_content, mExpandedContentFragment);
         mExpandedContentFragment.setHasOptionsMenu(false);
         transaction.commit();

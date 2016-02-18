@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 
-def mLibraryVersion = 0.3
+def mLibraryVersion = 0.4
 ext {
     bintrayRepo = 'maven'
     bintrayName = 'Search-View-Layout'
