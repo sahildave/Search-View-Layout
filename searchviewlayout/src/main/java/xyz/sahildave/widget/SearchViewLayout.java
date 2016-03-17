@@ -20,14 +20,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.support.annotation.DrawableRes;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -63,8 +61,10 @@ public class SearchViewLayout extends FrameLayout {
     private OnToggleAnimationListener mOnToggleAnimationListener;
     private SearchListener mSearchListener;
     private SearchBoxListener mSearchBoxListener;
-    private Fragment mExpandedContentFragment;
-    private FragmentManager mFragmentManager;
+    private android.app.Fragment mExpandedContentFragment;
+    private android.support.v4.app.Fragment mExpandedContentSupportFragment;
+    private android.app.FragmentManager mFragmentManager;
+    private android.support.v4.app.FragmentManager mSupportFragmentManager;
     private TransitionDrawable mBackgroundTransition;
     private Toolbar mToolbar;
 
@@ -233,11 +233,33 @@ public class SearchViewLayout extends FrameLayout {
      * Set the fragment which would be shown in the expanded state
      * @param activity to get fragment manager
      * @param contentFragment fragment which needs to be shown.
+     * @throws RuntimeException if support version of content fragment already set
      */
 
-    public void setExpandedContentFragment(Activity activity, Fragment contentFragment) {
+    public void setExpandedContentFragment(Activity activity, android.app.Fragment contentFragment) {
+        if (mExpandedContentSupportFragment != null || mSupportFragmentManager != null) {
+            throw new RuntimeException("You cannot set both Expanded Content Fragment and Expanded Content Support Fragment!");
+        }
+
         mExpandedContentFragment = contentFragment;
         mFragmentManager = activity.getFragmentManager();
+        mExpandedHeight = Utils.getSizeOfScreen(activity).y;
+    }
+
+    /***
+     * Set the support version fragment which would be shown in the expanded state
+     * @param activity to get support version of fragment manager, activity must be a FragmentActivity
+     * @param contentSupportFragment support version of fragment which needs to be shown.
+     * @throws RuntimeException if content fragment already set
+     */
+
+    public void setExpandedContentSupportFragment(FragmentActivity activity, android.support.v4.app.Fragment contentSupportFragment) {
+        if (mExpandedContentFragment != null || mFragmentManager != null) {
+            throw new RuntimeException("You cannot set both Expanded Content Fragment and Expanded Content Support Fragment!");
+        }
+
+        mExpandedContentSupportFragment = contentSupportFragment;
+        mSupportFragmentManager = activity.getSupportFragmentManager();
         mExpandedHeight = Utils.getSizeOfScreen(activity).y;
     }
 
@@ -355,20 +377,32 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     private void showContentFragment() {
-        final FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
-        transaction.replace(R.id.search_expanded_content, mExpandedContentFragment);
-        mExpandedContentFragment.setHasOptionsMenu(false);
-        transaction.commit();
+        if (mFragmentManager != null) {
+            final android.app.FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
+            transaction.replace(R.id.search_expanded_content, mExpandedContentFragment);
+            mExpandedContentFragment.setHasOptionsMenu(false);
+            transaction.commit();
+        } else if (mSupportFragmentManager != null) {
+            final android.support.v4.app.FragmentTransaction transaction = mSupportFragmentManager.beginTransaction();
+            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            transaction.replace(R.id.search_expanded_content, mExpandedContentSupportFragment);
+            mExpandedContentSupportFragment.setHasOptionsMenu(false);
+            transaction.commit();
+        }
     }
 
     private void hideContentFragment() {
-        if (mFragmentManager == null) {
+        if (mFragmentManager != null) {
+            final android.app.FragmentTransaction transaction = mFragmentManager.beginTransaction();
+            transaction.remove(mExpandedContentFragment).commit();
+        } else if (mSupportFragmentManager != null) {
+            final android.support.v4.app.FragmentTransaction transaction = mSupportFragmentManager.beginTransaction();
+            transaction.remove(mExpandedContentSupportFragment).commit();
+        } else {
             Log.e(LOG_TAG, "Fragment Manager is null. Returning");
             return;
         }
-        final FragmentTransaction transaction = mFragmentManager.beginTransaction();
-        transaction.remove(mExpandedContentFragment).commit();
     }
 
     private void toggleToolbar(boolean expanding) {
