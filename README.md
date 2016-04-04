@@ -123,7 +123,7 @@ Available at jCenter and mavenCentral.
 
 ``` groovy
 dependencies {
-    compile 'xyz.sahildave:searchviewlayout:0.2'
+    compile 'xyz.sahildave:searchviewlayout:0.4'
 }
 ```
     
