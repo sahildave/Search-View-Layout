@@ -43,11 +43,22 @@ public class SearchStaticRecyclerFragment extends Fragment {
         });
         return rootView;
     }
+    
+    // Define a public click listener interface for items of the v7.RecyclerView which has no OnItemClickListener by default
+    public interface ListOnItemClickListener {
+        void onItemClick(View view, int position);
+        void onItemLongClick(View view, int position);
+    }
 
     public class ListViewAdapter extends RecyclerView.Adapter<ListViewAdapter.ListViewHolder> {
         public List<String> mStringList;
         public ListViewAdapter(List<String> stringList) {
             this.mStringList = stringList;
+        }
+        
+        private ListOnItemClickListener mOnItemClickListener;
+        public void setListOnItemClickListener(ListOnItemClickListener mOnItemClickListener) {
+            this.mOnItemClickListener = mOnItemClickListener;
         }
 
         class ListViewHolder extends RecyclerView.ViewHolder {
@@ -71,8 +82,29 @@ public class SearchStaticRecyclerFragment extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(ListViewHolder viewHolder, int position) {
+        public void onBindViewHolder(final ListViewHolder viewHolder, int position) {
             viewHolder.mDetailText.setText(mStringList.get(position));
+            
+            // Click event called here
+            if (mOnItemClickListener != null) {
+                viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = viewHolder.getLayoutPosition();
+                        mOnItemClickListener.onItemClick(viewHolder.itemView, pos);
+                    }
+                });
+
+                viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        int pos = viewHolder.getLayoutPosition();
+                        mOnItemClickListener.onItemLongClick(viewHolder.itemView, pos);
+                        return false;
+                    }
+                });
+            }
+            
         }
     }
 }
