@@ -293,7 +293,20 @@ public class SearchViewLayout extends FrameLayout {
             mSearchEditText.setHint(searchViewHint);
         }
     }
-
+    
+    /***
+     * Set a text for the expanded editText
+     *
+     * Maybe what you input is not a full keyword, and you can use this to stuff the editText
+     * usually by clicking the items of list showing inexact results.
+     * @param searchViewText
+     */
+    public void setExpandedText(String searchViewText) {
+        if (searchViewText != null) {
+            mSearchEditText.setText(searchViewText);
+        }
+    }
+    
     public void expand(boolean requestFocus) {
         mCollapsedHeight = getHeight();
         toggleToolbar(true);
