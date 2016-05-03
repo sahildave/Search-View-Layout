@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         final SearchViewLayout searchViewLayout = (SearchViewLayout) findViewById(R.id.search_view_container);
-        searchViewLayout.setExpandedContentFragment(this, new SearchStaticScrollFragment());
+        searchViewLayout.setExpandedContentSupportFragment(this, new SearchStaticListSupportFragment());
         searchViewLayout.handleToolbarAnimation(toolbar);
         searchViewLayout.setCollapsedHint("Collapsed Hint");
         searchViewLayout.setExpandedHint("Expanded Hint");

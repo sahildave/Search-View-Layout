@@ -237,10 +237,6 @@ public class SearchViewLayout extends FrameLayout {
      */
 
     public void setExpandedContentFragment(Activity activity, android.app.Fragment contentFragment) {
-        if (mExpandedContentSupportFragment != null || mSupportFragmentManager != null) {
-            throw new RuntimeException("You cannot set both Expanded Content Fragment and Expanded Content Support Fragment!");
-        }
-
         mExpandedContentFragment = contentFragment;
         mFragmentManager = activity.getFragmentManager();
         mExpandedHeight = Utils.getSizeOfScreen(activity).y;
@@ -254,10 +250,6 @@ public class SearchViewLayout extends FrameLayout {
      */
 
     public void setExpandedContentSupportFragment(FragmentActivity activity, android.support.v4.app.Fragment contentSupportFragment) {
-        if (mExpandedContentFragment != null || mFragmentManager != null) {
-            throw new RuntimeException("You cannot set both Expanded Content Fragment and Expanded Content Support Fragment!");
-        }
-
         mExpandedContentSupportFragment = contentSupportFragment;
         mSupportFragmentManager = activity.getSupportFragmentManager();
         mExpandedHeight = Utils.getSizeOfScreen(activity).y;
@@ -392,15 +384,13 @@ public class SearchViewLayout extends FrameLayout {
     private void showContentFragment() {
         if (mFragmentManager != null) {
             final android.app.FragmentTransaction transaction = mFragmentManager.beginTransaction();
-            transaction.setCustomAnimations(R.animator.fade_in, R.animator.fade_out);
+            transaction.setCustomAnimations(R.animator.fade_in_object_animator, R.animator.fade_out_object_animator);
             transaction.replace(R.id.search_expanded_content, mExpandedContentFragment);
-            mExpandedContentFragment.setHasOptionsMenu(false);
             transaction.commit();
         } else if (mSupportFragmentManager != null) {
             final android.support.v4.app.FragmentTransaction transaction = mSupportFragmentManager.beginTransaction();
-            transaction.setCustomAnimations(R.anim.fade_in, R.anim.fade_out);
+            transaction.setCustomAnimations(R.anim.fade_in_anim_set, R.anim.fade_out_anim_set);
             transaction.replace(R.id.search_expanded_content, mExpandedContentSupportFragment);
-            mExpandedContentSupportFragment.setHasOptionsMenu(false);
             transaction.commit();
         }
     }
@@ -414,7 +404,6 @@ public class SearchViewLayout extends FrameLayout {
             transaction.remove(mExpandedContentSupportFragment).commit();
         } else {
             Log.e(LOG_TAG, "Fragment Manager is null. Returning");
-            return;
         }
     }
 

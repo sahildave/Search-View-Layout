@@ -129,6 +129,9 @@ dependencies {
     
 ### CHANGELOG
 
+### 0.5
+* Added support for fragment-v4
+
 ### 0.4
 * Moved anim files to /animator res dir
 

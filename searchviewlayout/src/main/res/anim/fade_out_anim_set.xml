@@ -1,5 +1,5 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android"
-    android:interpolator="@android:interpolator/accelerate_quad">
+     android:interpolator="@android:interpolator/accelerate_quad">
     <alpha
         android:duration="@integer/animation_duration"
         android:fromAlpha="1.0"
