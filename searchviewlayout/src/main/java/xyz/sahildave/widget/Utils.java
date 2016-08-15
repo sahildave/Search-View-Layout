@@ -1,15 +1,15 @@
 package xyz.sahildave.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Point;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorCompat;
+import android.support.v4.view.ViewPropertyAnimatorListener;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.inputmethod.InputMethodManager;
 
 /**
@@ -76,11 +76,16 @@ public class Utils {
     public static void fadeOut(final View fadeOut, int durationMs,
                                final AnimationCallback callback) {
         fadeOut.setAlpha(1);
-        final ViewPropertyAnimator animator = fadeOut.animate();
+        final ViewPropertyAnimatorCompat animator = ViewCompat.animate(fadeOut);
         animator.cancel();
-        animator.alpha(0).withLayer().setListener(new AnimatorListenerAdapter() {
+        animator.alpha(0).withLayer().setListener(new ViewPropertyAnimatorListener() {
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationStart(View view) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(View view) {
                 fadeOut.setVisibility(View.GONE);
                 if (callback != null) {
                     callback.onAnimationEnd();
@@ -88,7 +93,7 @@ public class Utils {
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationCancel(View view) {
                 fadeOut.setVisibility(View.GONE);
                 fadeOut.setAlpha(0);
                 if (callback != null) {
@@ -107,17 +112,17 @@ public class Utils {
     public static void fadeIn(final View fadeIn, int durationMs, int delay,
                               final AnimationCallback callback) {
         fadeIn.setAlpha(0);
-        final ViewPropertyAnimator animator = fadeIn.animate();
+        final ViewPropertyAnimatorCompat animator = ViewCompat.animate(fadeIn);
         animator.cancel();
         animator.setStartDelay(delay);
-        animator.alpha(1).withLayer().setListener(new AnimatorListenerAdapter() {
+        animator.alpha(1).withLayer().setListener(new ViewPropertyAnimatorListener() {
             @Override
-            public void onAnimationStart(Animator animation) {
+            public void onAnimationStart(View view) {
                 fadeIn.setVisibility(View.VISIBLE);
             }
 
             @Override
-            public void onAnimationCancel(Animator animation) {
+            public void onAnimationCancel(View view) {
                 fadeIn.setAlpha(1);
                 if (callback != null) {
                     callback.onAnimationCancel();
@@ -125,7 +130,7 @@ public class Utils {
             }
 
             @Override
-            public void onAnimationEnd(Animator animation) {
+            public void onAnimationEnd(View view) {
                 if (callback != null) {
                     callback.onAnimationEnd();
                 }
