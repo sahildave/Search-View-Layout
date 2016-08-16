@@ -214,7 +214,12 @@ public class SearchViewLayout extends FrameLayout {
         mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
         mBackgroundTransition.setCrossFadeEnabled(true);
 
-        setBackground(mBackgroundTransition);
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            setBackgroundDrawable(mBackgroundTransition);
+        } else {
+            setBackground(mBackgroundTransition);
+        }
+
         Utils.setPaddingAll(SearchViewLayout.this, 8);
 
         super.onFinishInflate();
@@ -266,7 +271,13 @@ public class SearchViewLayout extends FrameLayout {
 
         mBackgroundTransition = new TransitionDrawable(new Drawable[]{mCollapsedDrawable, mExpandedDrawable});
         mBackgroundTransition.setCrossFadeEnabled(true);
-        setBackground(mBackgroundTransition);
+
+        if(android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            setBackgroundDrawable(mBackgroundTransition);
+        } else {
+            setBackground(mBackgroundTransition);
+        }
+
         Utils.setPaddingAll(SearchViewLayout.this, 8);
     }
 
