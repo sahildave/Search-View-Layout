@@ -123,11 +123,14 @@ Available at jCenter and mavenCentral.
 
 ``` groovy
 dependencies {
-    compile 'xyz.sahildave:searchviewlayout:0.5'
+    compile 'xyz.sahildave:searchviewlayout:0.6'
 }
 ```
     
 ### CHANGELOG
+
+### 0.6
+* Added support for API 15
 
 ### 0.5
 * Added support for fragment-v4
