@@ -53,7 +53,7 @@ public class SearchViewLayout extends FrameLayout {
     private View mSearchIcon;
     private View mCollapsedSearchBox;
     private View mBackButtonView;
-    private View mExpandedSearchIcon;
+    private View mExpandedRightIcon;
 
     private int toolbarExpandedHeight = 0;
 
@@ -74,6 +74,7 @@ public class SearchViewLayout extends FrameLayout {
     private int mExpandedHeight;
     private int mCollapsedHeight;
     private TextView mCollapsedHintView;
+    private boolean mIsClearButtonEnabled;
 
     /***
      * Interface for listening to animation start and finish.
@@ -87,7 +88,8 @@ public class SearchViewLayout extends FrameLayout {
 
     /***
      * Interface for listening to search finish call.
-     * Called on clicking of search button on keyboard and {@link #mExpandedSearchIcon}
+     * Called on clicking of search button on keyboard and {@link #mExpandedRightIcon}
+     * (if clear button disabled)
      */
 
     public interface SearchListener {
@@ -132,7 +134,7 @@ public class SearchViewLayout extends FrameLayout {
         mExpanded = (ViewGroup) findViewById(R.id.search_expanded_root);
         mSearchEditText = (EditText) mExpanded.findViewById(R.id.search_expanded_edit_text);
         mBackButtonView = mExpanded.findViewById(R.id.search_expanded_back_button);
-        mExpandedSearchIcon = findViewById(R.id.search_expanded_magnifying_glass);
+        mExpandedRightIcon = findViewById(R.id.search_expanded_magnifying_glass);
 
         // Convert a long click into a click to expand the search box, and then long click on the
         // search view. This accelerates the long-press scenario for copy/paste.
@@ -174,11 +176,11 @@ public class SearchViewLayout extends FrameLayout {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (mSearchEditText.getText().length() > 0) {
-                    if (mExpandedSearchIcon.getVisibility() != View.VISIBLE) {
-                        Utils.fadeIn(mExpandedSearchIcon, ANIMATION_DURATION);
+                    if (mExpandedRightIcon.getVisibility() != View.VISIBLE) {
+                        Utils.fadeIn(mExpandedRightIcon, ANIMATION_DURATION);
                     }
                 } else {
-                    Utils.fadeOut(mExpandedSearchIcon, ANIMATION_DURATION);
+                    Utils.fadeOut(mExpandedRightIcon, ANIMATION_DURATION);
                 }
                 if(mSearchBoxListener!=null) mSearchBoxListener.onTextChanged(s, start, before, count);
             }
@@ -201,11 +203,15 @@ public class SearchViewLayout extends FrameLayout {
             }
         });
 
-        mExpandedSearchIcon.setOnClickListener(new OnClickListener() {
+        mExpandedRightIcon.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                callSearchListener();
-                Utils.hideInputMethod(v);
+                if (mIsClearButtonEnabled) {
+                    mSearchEditText.getText().clear();
+                } else {
+                    callSearchListener();
+                    Utils.hideInputMethod(v);
+                }
             }
         });
 
@@ -381,12 +387,34 @@ public class SearchViewLayout extends FrameLayout {
     }
 
     /**
-     * Allow user to set a search icon in the expanded view
+     * Allow user to set a right side icon in the expanded view
      *
      * @param iconResource resource id of icon
      */
-    public void setExpandedSearchIcon(@DrawableRes int iconResource) {
-        ((ImageView)mExpandedSearchIcon).setImageResource(iconResource);
+    public void setExpandedRightIcon(@DrawableRes int iconResource) {
+        ((ImageView)mExpandedRightIcon).setImageResource(iconResource);
+        mExpandedRightIcon.setTag("overrided"); // to avoid overriding in setClearButtonEnabled()
+    }
+
+    /**
+     * Enables or disables clear button instead of search icon
+     * <br>
+     * Use {@link #setExpandedRightIcon(int)} to customize icon
+     * <p/>
+     * Disabled by default
+     *
+     * @param isEnabled true to enable; false to disable
+     */
+    public void setClearButtonEnabled(boolean isEnabled) {
+        mIsClearButtonEnabled = isEnabled;
+
+        if (!"overrided".equals(mExpandedRightIcon.getTag())) {
+            if (isEnabled) {
+                ((ImageView) mExpandedRightIcon).setImageResource(R.drawable.ic_clear);
+            } else {
+                ((ImageView) mExpandedRightIcon).setImageResource(R.drawable.ic_search);
+            }
+        }
     }
 
     private void showContentFragment() {
